@@ -1,70 +1,145 @@
 /* Knowledge Base */
-food_type(starches, ugali).
-food_type(starches, chapati).
-food_type(starches, rice).
-food_type(starches, matoke).
+food_type(starches, mandazi).
+food_type(starches, bread).
+
+food_type(proteins, eggs).
+food_type(proteins, sausages).
+food_type(proteins, fish).
+food_type(proteins, chicken).
+
+food_type(vegetables, spinach).
 food_type(vegetables, sukuma_wiki).
 food_type(vegetables, kunde).
-food_type(vegetables, managu).
-food_type(proteins, nyama_choma).
-food_type(proteins, fish).
-food_type(proteins, beans).
-food_type(dairy, maziwa_mala).
-food_type(dairy, ghee).
-food_type(fruits, mango).
-food_type(fruits, banana).
-food_type(fruits, avocado).
 
-/* BMI Categories */
-bmi_category(Underweight, BMI) :- BMI < 18.5, Underweight = true.
-bmi_category(Normal, BMI) :- BMI >= 18.5, BMI < 25, Normal = true.
-bmi_category(Overweight, BMI) :- BMI >= 25, BMI < 30, Overweight = true.
-bmi_category(Obese, BMI) :- BMI >= 30, Obese = true.
+food_type(fruits, avocado).
+food_type(fruits, banana).
+food_type(fruits, mango).
+food_type(fruits, apple).
+
+food_type(drinks, tea).
+food_type(drinks, coffee).
+food_type(drinks, juice).
+food_type(drinks, milk).
+food_type(drinks, water).
 
 /* Recommendations based on BMI and meal times */
-recommend_food(BMI, morning) :-
-    bmi_category(Underweight, BMI),
-    write('Recommended morning meal: Bread with avocado and a glass of milk.').
+recommend_food(BMI, morning, Recommendation) :-
+    bmi_category(Category, BMI),
+    recommend_meal(Category, morning, Recommendation).
 
-recommend_food(BMI, morning) :-
-    bmi_category(Normal, BMI),
-    write('Recommended morning meal: Mandazi with tea or coffee.').
+recommend_food(BMI, lunch, Recommendation) :-
+    bmi_category(Category, BMI),
+    recommend_meal(Category, lunch, Recommendation).
 
-recommend_food(BMI, morning) :-
-    bmi_category(Overweight, BMI); bmi_category(Obese, BMI),
-    write('Recommended morning meal: Oatmeal with fruits and a glass of water.').
+recommend_food(BMI, dinner, Recommendation) :-
+    bmi_category(Category, BMI),
+    recommend_meal(Category, dinner, Recommendation).
 
-recommend_food(BMI, afternoon) :-
-    bmi_category(Underweight, BMI),
-    write('Recommended afternoon meal: Rice with fish and kunde.').
+recommend_meal('Underweight', morning, [Starch, Protein, Fruit, Drink]) :-
+    food_type(starches, Starch),
+    (Starch = mandazi ; Starch = bread),
+    food_type(proteins, Protein),
+    food_type(fruits, Fruit),
+    food_type(drinks, Drink),
+    (Drink = tea ; Drink = coffee).
 
-recommend_food(BMI, afternoon) :-
-    bmi_category(Normal, BMI),
-    write('Recommended afternoon meal: Ugali with nyama choma and managu.').
+recommend_meal('Underweight', lunch, [Starch, Protein, Vegetable, Fruit, Drink]) :-
+    food_type(starches, Starch),
+    food_type(proteins, Protein),
+    food_type(vegetables, Vegetable),
+    food_type(fruits, Fruit),
+    food_type(drinks, Drink),
+    (Drink = juice ; Drink = water).
 
-recommend_food(BMI, afternoon) :-
-    bmi_category(Overweight, BMI); bmi_category(Obese, BMI),
-    write('Recommended afternoon meal: Chapati with sukuma wiki and ghee.').
+recommend_meal('Underweight', dinner, [Starch, Protein, Vegetable, Fruit, Drink]) :-
+    food_type(starches, Starch),
+    food_type(proteins, Protein),
+    food_type(vegetables, Vegetable),
+    food_type(fruits, Fruit),
+    food_type(drinks, Drink),
+    (Drink = juice ; Drink = water).
 
-recommend_food(BMI, dinner) :-
-    bmi_category(Underweight, BMI),
-    write('Recommended dinner meal: Chapati with beans and maziwa mala.').
+recommend_meal('Normal', morning, [Starch, Protein, Fruit, Drink]) :-
+    food_type(starches, Starch),
+    (Starch = mandazi ; Starch = bread),
+    food_type(proteins, Protein),
+    food_type(fruits, Fruit),
+    food_type(drinks, Drink),
+    (Drink = tea ; Drink = coffee ; Drink = milk).
 
-recommend_food(BMI, dinner) :-
-    bmi_category(Normal, BMI),
-    write('Recommended dinner meal: Rice with fish and avocado.').
+recommend_meal('Normal', lunch, [Starch, Protein, Vegetable, Fruit, Drink]) :-
+    food_type(starches, Starch),
+    food_type(proteins, Protein),
+    food_type(vegetables, Vegetable),
+    food_type(fruits, Fruit),
+    food_type(drinks, Drink),
+    (Drink = juice ; Drink = water).
 
-recommend_food(BMI, dinner) :-
-    bmi_category(Overweight, BMI),
-    write('Recommended dinner meal: Ugali with sukuma wiki and ghee.').
+recommend_meal('Normal', dinner, [Starch, Protein, Vegetable, Fruit, Drink]) :-
+    food_type(starches, Starch),
+    food_type(proteins, Protein),
+    food_type(vegetables, Vegetable),
+    food_type(fruits, Fruit),
+    food_type(drinks, Drink),
+    (Drink = juice ; Drink = water).
 
-recommend_food(BMI, dinner) :-
-    bmi_category(Obese, BMI),
-    write('Recommended dinner meal: Matoke with nyama choma and managu.').
+recommend_meal('Overweight', morning, [Starch, Protein, Fruit, Drink]) :-
+    food_type(starches, Starch),
+    (Starch = mandazi ; Starch = bread),
+    food_type(proteins, Protein),
+    food_type(fruits, Fruit),
+    food_type(drinks, Drink),
+    (Drink = tea ; Drink = coffee).
 
-/* Predicate to calculate BMI */
-calculate_bmi(Weight, Height, BMI) :-
-    BMI is Weight / (Height * Height).
+recommend_meal('Overweight', lunch, [Starch, Protein, Vegetable, Fruit, Drink]) :-
+    food_type(starches, Starch),
+    (Starch = bread),
+    food_type(proteins, Protein),
+    food_type(vegetables, Vegetable),
+    food_type(fruits, Fruit),
+    food_type(drinks, Drink),
+    (Drink = juice ; Drink = water).
+
+recommend_meal('Overweight', dinner, [Starch, Protein, Vegetable, Fruit, Drink]) :-
+    food_type(starches, Starch),
+    (Starch = bread),
+    food_type(proteins, Protein),
+    food_type(vegetables, Vegetable),
+    food_type(fruits, Fruit),
+    food_type(drinks, Drink),
+    (Drink = juice ; Drink = water).
+
+recommend_meal('Obese', morning, [Starch, Protein, Fruit, Drink]) :-
+    food_type(starches, Starch),
+    (Starch = mandazi ; Starch = bread),
+    food_type(proteins, Protein),
+    food_type(fruits, Fruit),
+    food_type(drinks, Drink),
+    (Drink = tea ; Drink = coffee).
+
+recommend_meal('Obese', lunch, [Starch, Protein, Vegetable, Fruit, Drink]) :-
+    food_type(starches, Starch),
+    (Starch = bread),
+    food_type(proteins, Protein),
+    food_type(vegetables, Vegetable),
+    food_type(fruits, Fruit),
+    food_type(drinks, Drink),
+    (Drink = juice ; Drink = water).
+
+recommend_meal('Obese', dinner, [Starch, Protein, Vegetable, Fruit, Drink]) :-
+    food_type(starches, Starch),
+    (Starch = bread),
+    food_type(proteins, Protein),
+    food_type(vegetables, Vegetable),
+    food_type(fruits, Fruit),
+    food_type(drinks, Drink),
+    (Drink = juice ; Drink = water).
+
+/* BMI Categories */
+bmi_category('Underweight', BMI) :- BMI < 18.5.
+bmi_category('Normal', BMI) :- BMI >= 18.5, BMI < 25.
+bmi_category('Overweight', BMI) :- BMI >= 25, BMI < 30.
+bmi_category('Obese', BMI) :- BMI >= 30.
 
 /* Query */
 start :-
@@ -73,8 +148,9 @@ start :-
     read(Weight),
     write('Please enter your height (in meters): '),
     read(Height),
-    calculate_bmi(Weight, Height, BMI),
+    BMI is Weight / (Height * Height),
     write('Your BMI is: '), write(BMI), nl,
-    write('Please enter the time of the day (morning, afternoon, or dinner): '),
+    write('Please enter the time of the day (morning, lunch, or dinner): '),
     read(Time),
-    recommend_food(BMI, Time).
+    recommend_food(BMI, Time, Recommendation),
+    write('Recommended meal: '), write(Recommendation), nl.
