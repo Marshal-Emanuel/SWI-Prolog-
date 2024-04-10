@@ -1,4 +1,4 @@
-/* Knowledge Base */  
+/* Knowledge Base */
 food_type(starches, mandazi).
 food_type(starches, bread). 
 
