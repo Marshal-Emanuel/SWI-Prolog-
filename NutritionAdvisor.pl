@@ -1,6 +1,6 @@
 /* Knowledge Base */  
 food_type(starches, mandazi).
-food_type(starches, bread).
+food_type(starches, bread). 
 
 food_type(proteins, eggs).
 food_type(proteins, sausages).
